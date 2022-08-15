@@ -1,0 +1,107 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model admin {
+  id    String    @default(uuid()) @id
+  email  String @unique
+  password String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+}
+
+model users {
+  id    String     @default(uuid()) @id
+  email String @unique
+  username  String
+  password String
+  isDeleted Boolean @default(false)
+  recipe recipe[] 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+}
+
+model sessions {
+  id    String     @default(uuid()) @id
+  userId String
+  token String @db.LongText()
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+}
+
+model recipe{
+  id String @default(uuid()) @id
+  title String
+  discription String
+  ingredients ingredients[]
+  image String?
+  rating Float?
+  isDeleted Boolean @default(false)
+  isHidden Boolean @default(false)
+  likes likes[] 
+  comments comments[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+  // relation to the users model
+  users users @relation(fields: [userId], references: [id])
+  userId String @unique
+}
+
+// ingredients model
+model ingredients{
+  id String @default(uuid()) @id
+  items String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+  // relation to the recipe model
+  recipe recipe @relation(fields: [RecipeId], references: [id])
+  RecipeId String @unique
+}
+// likes model and its list of users
+model likes{
+  id String @default(uuid()) @id
+  users like_users[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+  // relation to the recipe model
+  recipe recipe @relation(fields: [RecipeId], references: [id])
+  RecipeId String @unique
+}
+model like_users{
+  id String @default(uuid()) @id
+  user_id String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+  // relation to the likes model
+  likes likes @relation(fields: [LikesId], references: [id])
+  LikesId String @unique
+}
+
+// comments model and its list of user and its comments
+model comments{
+  id String @default(uuid()) @id
+  users comments_users[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+  // relation to the recipe model
+  recipe recipe @relation(fields: [RecipeId], references: [id])
+  RecipeId String @unique
+}
+model comments_users{
+  id String @default(uuid()) @id
+  user_id String
+  user_comment String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+  // relation to the comments model
+  comments comments @relation(fields: [commentsId], references: [id])
+  commentsId String @unique
+}
