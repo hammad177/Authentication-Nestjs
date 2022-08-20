@@ -24,7 +24,6 @@ model users {
   username  String
   password String
   isDeleted Boolean @default(false)
-  recipe recipe[] 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
 }
@@ -35,73 +34,4 @@ model sessions {
   token String @db.LongText()
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
-}
-
-model recipe{
-  id String @default(uuid()) @id
-  title String
-  description String
-  ingredients ingredients[]
-  image String?
-  rating Float?
-  isDeleted Boolean @default(false)
-  isHidden Boolean @default(false)
-  likes likes[] 
-  comments comments[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
-  // relation to the users model
-  users users @relation(fields: [userId], references: [id])
-  userId String 
-}
-
-// ingredients model
-model ingredients{
-  id String @default(uuid()) @id
-  items String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
-  // relation to the recipe model
-  recipe recipe @relation(fields: [RecipeId], references: [id])
-  RecipeId String 
-}
-// likes model and its list of users
-model likes{
-  id String @default(uuid()) @id
-  users like_users[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
-  // relation to the recipe model
-  recipe recipe @relation(fields: [RecipeId], references: [id])
-  RecipeId String 
-}
-model like_users{
-  id String @default(uuid()) @id
-  user_id String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
-  // relation to the likes model
-  likes likes @relation(fields: [LikesId], references: [id])
-  LikesId String 
-}
-
-// comments model and its list of user and its comments
-model comments{
-  id String @default(uuid()) @id
-  users comments_users[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
-  // relation to the recipe model
-  recipe recipe @relation(fields: [RecipeId], references: [id])
-  RecipeId String 
-}
-model comments_users{
-  id String @default(uuid()) @id
-  user_id String
-  user_comment String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
-  // relation to the comments model
-  comments comments @relation(fields: [commentsId], references: [id])
-  commentsId String 
 }
