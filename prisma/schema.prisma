@@ -40,7 +40,7 @@ model sessions {
 model recipe{
   id String @default(uuid()) @id
   title String
-  discription String
+  description String
   ingredients ingredients[]
   image String?
   rating Float?
@@ -52,7 +52,7 @@ model recipe{
   updatedAt DateTime @updatedAt()
   // relation to the users model
   users users @relation(fields: [userId], references: [id])
-  userId String @unique
+  userId String 
 }
 
 // ingredients model
@@ -63,7 +63,7 @@ model ingredients{
   updatedAt DateTime @updatedAt()
   // relation to the recipe model
   recipe recipe @relation(fields: [RecipeId], references: [id])
-  RecipeId String @unique
+  RecipeId String 
 }
 // likes model and its list of users
 model likes{
@@ -73,7 +73,7 @@ model likes{
   updatedAt DateTime @updatedAt()
   // relation to the recipe model
   recipe recipe @relation(fields: [RecipeId], references: [id])
-  RecipeId String @unique
+  RecipeId String 
 }
 model like_users{
   id String @default(uuid()) @id
@@ -82,7 +82,7 @@ model like_users{
   updatedAt DateTime @updatedAt()
   // relation to the likes model
   likes likes @relation(fields: [LikesId], references: [id])
-  LikesId String @unique
+  LikesId String 
 }
 
 // comments model and its list of user and its comments
@@ -93,7 +93,7 @@ model comments{
   updatedAt DateTime @updatedAt()
   // relation to the recipe model
   recipe recipe @relation(fields: [RecipeId], references: [id])
-  RecipeId String @unique
+  RecipeId String 
 }
 model comments_users{
   id String @default(uuid()) @id
@@ -103,5 +103,5 @@ model comments_users{
   updatedAt DateTime @updatedAt()
   // relation to the comments model
   comments comments @relation(fields: [commentsId], references: [id])
-  commentsId String @unique
+  commentsId String 
 }
